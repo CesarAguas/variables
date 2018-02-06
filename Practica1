@@ -1,0 +1,21 @@
+install.packages("tidyverse")library(tidyverse)
+#******************* PRACTICA 1 ********************################### EJERCICIO 1 #####################A)a<-seq(20,1,-1)a#B)b<-c(seq(1,20,1),seq(19,1,-1))b #C)c<-c(rep(c(4,6,3),10),4)c
+################### EJERCICIO 2 ####################set.seed(50)xvec<-sample(0:999,250,replace = T)yvec<-sample(0:999,250,replace = T)xvecyvec
+#___________________A)d<-yvec[-1]de<-xvec[-250]ef<-d-ef
+#___________________B)for(i in 1:250){   set.seed(50)  xvec<-sample(0:999,250,replace = T)     f[i]<-c(xvec[i]+2*xvec[i+1]-xvec[i+2])   } f
+ ######################### EJERCICIO 3 #######################
+help(matrix)
+g<-matrix(10,15,3)g1<-matrix(g*c(1,-1,1),nrow =3)G<-t(g1)G
+######################### EJERCICIO 4 ########################matrix(0,6,6)row
+
+
+
+
+
+
+
+
+
+
+
+
