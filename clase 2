@@ -1,0 +1,118 @@
+
+vector_numerico<-c(1,10,15)
+vector_caracteres<-c("a","b","C")
+(vector_logico<-c(T,F,T))
+
+gcartas<-c(140,-50,20,-120,240)
+gdeportivas<-c(-24,-50,100,-350,10)
+dias<-c("L","Ma","Mir","J","V")
+names(gcartas)<-dias
+names(gdeportivas)<-dias
+gcartas;gdeportivas
+
+(gtotales<-gcartas+gdeportivas)
+
+(total_cartas<-sum(gcartas))
+(total_deportes<-sum(gdeportivas))
+(total_semana<-sum(gtotales))
+total_cartas>total_deportes
+
+(cartas_entre_semana<-gcartas[2:4])
+
+(cartas_inicio<-gcartas[dias[1:3]])
+
+mean(cartas_inicio)###promedio
+
+gcartas["L"]
+
+
+(vector_seleccion<-gcartas > 0) ### compara cada entrada del vector
+
+(dias_gananciasc<- gcartas[vector_seleccion]) ## imprime los valores que cumplen la condicion de vector_seleccion
+
+(vector_seleccion_dep<-gdeportivas>0)
+(dias_gan_dep<-gdeportivas[vector_seleccion_dep])
+
+
+#########################################################
+
+matrix(1:9,byrow = T, 3,3)
+
+prod_A<-c(460.948,314.4);prod_B<-c(290.475,247.9);prod_C<-c(309.306,165.8)
+
+ventas<-c(prod_A,prod_B,prod_C)
+
+ventas
+matriz_productos<-matrix(ventas,nrow = 3,byrow = T)
+
+region<-c("EU","LatnA")
+productos<-c("Producto A","Producto B","producto C")
+rownames(matriz_productos)<-productos
+colnames(matriz_productos)<-region
+
+(ventas_mundiales_prod<-rowSums(matriz_productos))
+
+prod_A2<-c(474.5,552.5);prod_B2<-c(310.7,338.7);prod_C2<-c(380.3,468.5)
+ventas2<-c(prod_A2,prod_B2,prod_C2)
+ventas2
+
+matriz_productos2<-matrix(ventas2,nrow = 3,byrow = T)
+
+colnames(matriz_productos2)<-region
+productos2<-c("Producto A2","Producto B2","producto C2")
+rownames(matriz_productos2)<-productos2
+
+(prod_total<-rbind(matriz_productos,matriz_productos2))
+
+(ventas_mundiales_region<-colSums(prod_total))  
+
+
+prod_total[3,2]
+
+prod_total[,2]
+
+mean(prod_total[,2])
+(algunos_dat_LA<-prod_total[1:2,2])
+mean(algunos_dat_LA)
+
+prod_total/5
+
+precio_unidad<-c(5,6,7,4,4.5,4.9)
+
+matriz_precios_unida<-matrix(precio_unidad, nrow = 6,ncol = 2,byrow = F)
+
+prod_total/matriz_precios_unida
+
+###############################################################################
+
+help(mtcars)
+
+head(mtcars) ### primeras 6 filas
+
+tail(mtcars) ### ultimas 6 filas
+str(mtcars) ###resumen
+
+nombre<-c("mercurio","venus","tierra","marte","jupiter","saturno","urano","neptuno")
+tipo<-c("solido","solido","solido","solido","gas","gas","hielo","hielo")
+diametro<-c(0.382,0.949,1,0.532,11.209,9.449,4.007,3.883)
+rotacion<-c(58.64,-243.02,1,1.03,0.41,0.43,-0.72,0.67)
+anillos<-c(F,F,F,F,T,T,T,T)
+planetas_df<-data.frame(nombre,tipo,diametro,rotacion,anillos)
+
+planetas_df[1,2]
+planetas_df[1:3,2:4]
+planetas_df[4,]
+planetas_df[1:5,3]
+
+planetas_df[1:5,"diametro"]
+
+vector_anillos<-planetas_df[,5]
+vector_anillos
+vector_anillos<-planetas_df$anillos
+
+planetas_df[vector_anillos,colnames(planetas_df)]
+
+subset(planetas_df,anillos==T)
+
+subset(planetas_df,rotacion>0.4)
+subset(planetas_df,diametro<1)
