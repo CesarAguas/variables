@@ -1,0 +1,62 @@
+######################################################## clase 3 #################################################
+
+posiciones<-order(planetas_df$diametro)
+planetas_df[posiciones,]
+
+died.At<-c(22,40,72,41)
+Writer.At<-c(16,18,36,36)
+first.name<-c("Jhon","Edgar","Walt","Jane")
+Second.name<-c("Doe","Poe","Whitman","Dostin")
+sexo<-c("MALE","MALE","MALE","FEIMALE")
+Date.of.death<-c("2015-05-10","1849-10-07","1982-03-26","1817-07-18")
+
+writers_df<-data.frame(died.At,Writer.At,I(first.name),I(Second.name),sexo,as.Date(Date.of.death,"%Y-%m-%d"))
+
+
+names(writers_df)<-c("Age.at.deth","Age.as.writer","Name","Surname","Gender","Death")
+
+row.names(writers_df)<-c("ID1","ID2","ID3","ID4")
+
+dim(writers_df) #### dimencion
+nrow(writers_df)
+ncol(writers_df)
+length(writers_df)
+
+ages<-writers_df[,1:2]
+ages
+
+apply(ages,1,median) ### saca mediana
+
+
+apply(ages,2,mean) #### Saca promedios
+
+
+ab<-data.frame()
+age<-numeric()
+name<-character()
+ID<-integer()
+gender<-factor()
+date<-as.Date(character())
+
+ab<-data.frame(age,name,ID,gender,date)
+
+str(writers_df)
+
+
+jane_writer<-subset(writers_df,Name=="Jane")
+
+forty_writers<-writers_df[grep("4",writers_df$Age.at.deth),]### ayuda a buscar una cadena o fila con el numero 4
+
+subset(writers_df,Age.at.deth>=40 & Age.at.deth<=70)
+
+## eliminar datos
+
+writers_df$Age.at.deth<-NULL ##fila o columna entera
+
+writers_df[1,3]<-NA ##solo un dato
+
+filas_a_mantener<- c(F,T,F,T)
+limited_writers<-writers_df[filas_a_mantener,]
+
+
+
