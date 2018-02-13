@@ -1,0 +1,109 @@
+vector_sexo<-c("Mujer","Hombre","Mujer","Mujer","Hombre")
+class(vector_sexo)
+factor_vec_sex<-factor(vector_sexo)
+factor_vec_sex
+(vector_animales<-c("Perro","Caballo","Koala","Buitre"))
+(factor_vector_animales<-factor(vector_animales))
+(vector_temperatura<-c("Alta","Baja","Alta","Baja","Media"))
+(factor_vector_temperatura<-factor(vector_temperatura,ordered = T, levels = c("Baja","Media","Alta")))
+
+vector_encuesta<-c("H","M","M","H","H")
+factor_vector_encuesta<-factor(vector_encuesta)
+levels(factor_vector_encuesta)<-c("Hombre","Mujer")
+factor_vector_encuesta
+
+summary(vector_encuesta)
+summary(factor_vector_encuesta)
+
+#no tinenen orden en su categoria
+hombre<-factor_vector_encuesta[1]
+mujer<-factor_vector_encuesta[2]
+hombre>mujer
+
+### las que tinene un orden en sus categorias
+a<-factor_vector_temperatura[1]
+b<-factor_vector_temperatura[2]
+m<-factor_vector_temperatura[3]
+a<b
+
+vector_velocidad<-c("Media","Baja","Baja","Media","Alta")
+factor_vector_velocidad<-factor(vector_velocidad,ordered = T,levels = c("Baja","Media","Alta"))
+factor_vector_velocidad
+
+summary(factor_vector_velocidad)
+
+da2<-factor_vector_velocidad[2];da5<-factor_vector_velocidad[5]
+da2>da5
+mi_vector<-1:10
+mi_matriz<-matrix(1:9,ncol =3)
+mi_matriz
+
+mi_df<-mtcars[1:10,]
+
+mi_lista<-list(mi_vector,mi_matriz,mi_df)
+mi_lista
+
+
+pel<-"El resplandor"
+act<-c("Jack Nicholson","Shelly Duvall","Danny Lloyd","Scatman Crothers","Barry Nelson" )
+puntaje<-c(4.5,5,5)
+fuente<-c("IMDB1","IMDB2","IMDB3")
+comentarios<-c("Mejor Pelicula de terror que eh visto","Una pelicula brillante de Stanly Kubrik","Una obra maestra del terror psicologico")
+
+reseña<-data.frame(puntaje,fuente,comentarios)
+
+lista_resplandor<-list(pel,act,reseña)
+lista_resplandor
+
+lista_resplandor[[1]]
+lista_resplandor[1]
+lista_resplandor[[2]]
+lista_resplandor[[2]][2]
+lista_completa_resplandor<-c(lista_resplandor,estreno=1980)
+lista_completa_resplandor
+
+
+lista_completa_resplandor[[1]]="el resplandor"
+lista_completa_resplandor
+
+
+nueva_lista<-c(titulo=lista_completa_resplandor[[1]],reparto=lista_completa_resplandor[[2]],reseña=lista_completa_resplandor[[3]],estreno=lista_completa_resplandor[[4]])
+nueva_lista$reparto5
+
+### Grafica   ggplot2
+ 
+install.packages("gplots")
+install.packages("venneuler")
+install.packages("manipulate")
+install.packages("RColorBrewer")
+install.packages("rjava")
+library(gplots)
+library(venneuler)
+library(manipulate)
+library(RColorBrewer)
+library(ggplot2)
+
+
+
+
+x<-seq(10,870,10)
+x
+
+attach(airquality)
+Ozone
+
+boxplot(airquality)
+par(mfrow=c(2,2))
+
+boxplot(airquality$Ozone~airquality$Month,col = 2:6, xlab="month", ylab="ozone",sub="boxplot(airquality$Ozone~airquality$Month)")
+title("graficas equivalentes")
+
+plot(factor(airquality$Month),airquality$Ozone,col=3:7, xlab="Mes", ylab = "Ozono",sub="plot(factor(airquality$Month),airquality$Ozone)")
+
+
+
+mesozmedia<-tapply(airquality$Ozone,factor(airquality$Month),mean,na.rn=T)
+par(mfrow=c(1,2))
+barplot(mesozmedia,col = 7:11,mean="media del ozono por mes")
+
+pie(mesozmedia,col = rainbow(5))
