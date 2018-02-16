@@ -1,0 +1,18 @@
+f_divisores<-function(n)
+{
+  contador<-0
+  i<-2
+  while(i<=n/2)
+    {
+    ##### n%%i==0 residuo
+     if(n%%i==0)
+     {
+      contador<-contador+1
+      cat(i,"\n") ## depliega en la pantalla
+     }
+    i<-i+1
+    }
+ contador
+}
+
+f_divisores(64)
