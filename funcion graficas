@@ -1,0 +1,28 @@
+
+
+getwd()
+
+datos<-read.csv("inflammation-01.csv")
+maximo<-0
+minimo<-0
+
+Max_Min_Prom<-function(x)
+{
+  for (i in 1:59) {
+    maximo[i]<-max(datos[i,])
+  }
+  for (i in 1:59) {
+    minimo[i]<-min(datos[i,])
+  }
+
+  promedio<-rowMeans(datos)
+  
+conjunto<-c(plot(maximo,col="darkblue",xlab = ""),plot(minimo,col="red",xlab = ""),plot(promedio,col="green",xlab = ""))
+
+  return(conjunto)
+}
+
+x11()
+par(mfrow=c(2,2))
+Max_Min_Prom(datos)
+
