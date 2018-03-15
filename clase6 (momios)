@@ -1,0 +1,82 @@
+
+mod.fit.Ho<-glm(good~distance, family = binomial(link = logit),placekick)
+anova(mod.fit.Ho, mod.fit2, test = "Chisq")
+
+## nuestra hipotesis nula es good~ 1
+mod.fit.Ho<-glm(good~1, family = binomial(link = logit),placekick) ## hipotesis nula verdadera
+mod.fit.Ha<-glm(good~change, family = binomial(link = logit),placekick) ## hipotesis alternativa verdadera
+anova(mod.fit.Ho, mod.fit.Ha, test = "Chisq")
+
+#forma manual
+pi.hat.Ho<-mod.fit.Ho$fitted.values
+pi.hat.Ha<-mod.fit.Ha$fitted.values
+y<-placekick$good
+stat<--2*sum(y*logb(pi.hat.Ho/pi.hat.Ha)+(1-y)*logb((1-pi.hat.Ho)/(1-pi.hat.Ha)))
+pvalues<-1-pchisq(q=stat,df=1)
+data.frame(stat,pvalues)
+
+############################
+
+exp(mod.fit$coefficients[2]) ### la probabilidad de un gol de campo, cuando aumentamos la distancia una yarda 
+exp(-10*mod.fit$coefficients[2])##el estimado de los momios aumenta la prob. a 3.16 de anotar cuando se reducen 10 yardas 
+
+#### intervalos de confianza
+# wald
+
+(beta.ci<-confint.default(mod.fit, parm = "distance", level = 0.95))
+exp(beta.ci)## intervalo cuando el facto c es igual a 1, la razon de momio disminuye entre 13% y 10 %
+exp(10*beta.ci) ## cunado se incrementan la 10 yardas, la razon de momios diminuyen entre un 73% y un 63% 
+round(exp(-10*beta.ci),2)
+
+as.numeric(rev(round(exp(-10*beta.ci),2))) ### se acomodan los limites del intervalos, al diminur la distancia la partad los momios de exito aumentan entre 2.68 y 3.72 veces
+
+### intervalo de confianza para el verosimilitud
+ beta.ci<-confint(mod.fit,"distance",0.95)
+beta.ci
+as.numeric(rev(round(exp(-10*beta.ci),2))) 
+
+install.packages("mcprofile")
+library(mcprofile)
+
+k<-matrix(data=c(0,1), nrow=1, ncol=2, byrow = T)
+linear.combo<-mcprofile(object=mod.fit, CM=k)
+ci.log.OR<-confint(object = linear.combo, level = 0.95, adjust = "none")
+
+as.numeric(rev(exp(-10*ci.log.OR$confint)))
+
+####
+# estimacion de probabilidad de exito
+# p.hat para una distancia de 20 yardas
+
+linear.pred<-mod.fit$cofficients[1]+mod.fit$cofficients[2]*20
+### a una patada de 20 yardas la prob. de exito es un poco mas del 97%
+prepdict.data<-data.frame(distance=20)
+predict(object = mod.fit, newdata=prepdict.data, type="link")
+predict(object = mod.fit, newdata=prepdict.data, type="response")
+
+head(placekick$distance==20)
+mod.fit$fitted.values[3]
+
+### intervalo de wald
+alpha<-0.05
+linear.pred<-predict(object = mod.fit,newdata=prepdict.data, type="link", se=T)
+linear.pred
+pi.hat<-exp(linear.pred$fit)/(1+exp(linear.pred$fit))
+CI.lin.pred<-linear.pred$fit+qnorm(p=c(alpha/2,1-alpha/2))*linear.pred$se
+CI.pi<-exp(CI.lin.pred)/(1+exp(CI.lin.pred))
+CI.pi
+round(data.frame(predict.data,pi.hat,lower=CI.pi[1],upper=CI.pi[2]),4)
+
+##
+k<-matrix(data=c(1,20), nrow=1, ncol=1)
+k
+
+linear.combo<-mcprofile(object = mod.fit,CM=k) ## calcular -2log(Lambda)
+ci.logit.profile<-confint(object = linear.combo,level = 0.95)## int. conf, para beta0 +beta 1*x
+ci.logit.profile
+exp(ci.logit.profile$confint)
+
+
+
+
+
