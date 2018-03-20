@@ -1,0 +1,52 @@
+chall<-read.csv("C:\\Users\\USUARIO\\Desktop\\challenger.txt")
+seqa<-0:8
+seqa>3
+
+mod.fit.chal<-glm(O.ring>0~Temp, family = binomial(link=logit), data = chall)
+mod.fit.chal$coefficients
+predict(mod.fit.chal,data.frame(Temp=31), type = "response")
+
+######## predictor linenal
+placekick<-read.csv("C:\\Users\\USUARIO\\Desktop\\placekick.csv")
+mod.fit.Ho<-glm(good~distance+wind,binomial(link = logit),placekick)
+mod.fit.Ha<-glm(good~distance+wind+distance:wind,binomial(link = logit),placekick)
+
+summary(mod.fit.Ha) ### los coeficientes o estimados de los parametros
+
+anova(mod.fit.Ha,mod.fit.Ho, test = "Chisq") ### prueba de rason de verosimilitud
+
+##OR para viento a una distancia de 20
+
+(beta.hat<- mod.fit.Ha$coefficients[c(2:4)])
+c<-1
+distance<-seq(20,60,10)
+
+Or.wind<-exp(c*(beta.hat[2]+beta.hat[3]*distance))#OR estimado
+
+(cov.mat<-vcov(mod.fit.Ha)[2:4,2:4]) ## Matriz de covarianza para beta^1, beta^2 y beta^3
+var.log.OR<-cov.mat[2,2]+distance^2*cov.mat[3,3]+2*distance*cov.mat[2,3] # var(beta^2+distance*beta^3)
+
+ci.log.OR.low<-c*(beta.hat[2]+beta.hat[3]*distance)-c*qnorm(p=0.975)*sqrt(var.log.OR)
+ci.log.OR.up<-c*(beta.hat[2]+beta.hat[3]*distance)+c*qnorm(p=0.975)*sqrt(var.log.OR)
+data.frame(Or.wind, OR.low=(exp(ci.log.OR.low)), OR.up=exp(ci.log.OR.up))
+t(distance)
+cbind(distance,data.frame(Or.wind, OR.low=(exp(ci.log.OR.low)), OR.up=exp(ci.log.OR.up))) ### a una distancia de 50 yardas al aumentar en una yarda la probabailidad ded fracaso va aumentando entre un .04 y un .64  veses mas
+
+## con la division entre uno se habla de que mayor distancia mas influencia tiene el viento
+
+ ## con variables independientes tipo categoricas
+
+tomato<-read.csv("C:\\Users\\USUARIO\\Desktop\\TomatoVirus.csv")
+# infeccion  1 igual con plantas ya infectadas y liberar insectos sin virus y 2  la otra se liveran insectos ya con el virus
+# the control C representa control de tipo quimico, B contorl biologico y N ningun control
+# plantas de las cien plantas despues de 8 semanas se presentaron 21 infectadas
+
+class(tomato$Control)
+levels(tomato$Control)
+contrasts(tomato$Control) ##niveles como los representa R
+class(tomato$Infest)
+as.factor(tomato$Infest)
+
+
+mod.fit<-glm( Virus8/Plants~Infest + Control, binomial(link = logit), tomato,weights=Plants)
+summary(mod.fit) ### cuando tenemos un control quimico la prob l¿de qu edesarrolle virus decrece
