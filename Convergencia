@@ -1,0 +1,78 @@
+### convergencia
+
+mod.fit<-glm(formula = good~distance,family = binomial(link = logit), data = placekick, trace=T,epsilon=.0001,maxit=50)
+mod.fit$control
+
+
+set1<-data.frame(x1=c(1:10),y=c(0,0,0,0,0,1,1,1,1,1))
+set1
+mod.fit1<-glm(y~x1,set1,family = binomial(link = logit),trace=T)
+x11(width = 10, height = 6, pointsize = 12)
+#pdf(file="",widht=7,height=6,colormodel="cmyk)
+par(mfrow=c(1,2))
+plot(x=set1$x1, y=set1$y, main = "Grafica de set1", ylab = "Probabilidad estimada",xlab = expression(x[i]),panel.first=grid(col = "gray",lty = "dotted"))
+curve(expr = predict(object = mod.fit1, newdata = data.frame(x1=x),type="response"),col="red",add=T,lwd=2,n=1000)
+mod.fit1.1<-glm(formula = y~x1,family = binomial(link = logit), data = set1, trace=T,maxit=50)
+
+install.packages("logistf")
+library(logistf)
+mod.fit.firth1<-logistf(y~x1,data=set1)
+options(digits = 4)
+summary(mod.fit.firth1)
+data.frame(set1$x1,pi.hat= mod.fit.firth1$predict)
+options(digits = 7)
+logistftest(object = mod.fit.firth1,test=~x1-1,values=0)
+set2<-data.frame(x1=c(1:4,6,5,7:10),y=c(0,0,0,0,0,1,1,1,1,1))
+set2
+
+beta.hat<-mod.fit.firth1$coefficients
+curve(expr = exp(beta.hat[1]+beta.hat[2]*x)/(1+exp(beta.hat[1]+beta.hat[2]*x)),col="blue",add = T,n=1000)
+legend(x=0.5, y=0.8, legend = c("glm()","logistf()"),lty = c(1,1),lwd = c(1,2),col = c("red","blue"),bty="n")
+
+mod.fit2<-glm(y~x1,set2,family = binomial(link = logit), trace=T)
+plot(x=set2$x1, y=set2$y, main = "grafica set 2", ylab = "Probabilidad estimada", xlab = expression(x[1]), panel.first = grid(col="gray", lty = "dotted"))
+curve(expr = predict(object = mod.fit2, newdata = data.frame(x1=x),type="response"),col="red",add=T,lwd=2,n=1000)
+
+mod.fit.firth2<-logistf(y~x1,data=set2)
+beta.hat<-mod.fit.firth2$coefficients
+curve(expr = exp(beta.hat[1]+beta.hat[2]*x)/(1+exp(beta.hat[1]+beta.hat[2]*x)),col="blue",add = T,n=1000)
+legend(x=0.5, y=0.8, legend = c("glm()","logistf()"),lty = c(1,1),lwd = c(1,2),col = c("red","blue"),bty="n")
+
+mod.fit3<-glm(y~x1, data = set1,family = binomial(link = logit), maxit=3)
+logLik(mod.fit3)
+
+mod.fit100<-glm(y~x1, data = set1,family = binomial(link = logit), maxit=100)
+logLik(mod.fit100)
+
+
+
+##### Verificacion del modelo o validacion del modelo
+#logit(pi)=beta0+beta1*x con valor minimo 0 y valor maximo 1
+ 
+pi.x0<-0.01
+beta0<-log(pi.x0/(1-pi.x0))
+
+# valor beta1
+pi.x1<-0.99
+beta1<-log(pi.x1/(1-pi.x1))-beta0
+x11()
+curve(expr = exp(beta0+beta1*x)/(1+exp(beta0+beta1*x)),ylab = expression(pi),n=1000,lwd=3,xlab = expression(x[1]))
+
+set.seed(8238)
+## ajustamos a la curva de referencia
+x<-runif(n=500, min = 0, max = 1)
+x1<-runif(n=500, min = 0, max = 1)
+pi<-exp(beta0+beta1*x1)/(1+exp(beta0+beta1*x1))
+head(pi)
+
+set.seed(1829)
+y<-rbinom(n=length(x1),size = 1,prob = pi)
+head(data.frame(y,x1,pi), n=10)
+
+mod.fit<-glm(y~x1, family = binomial(link = logit))
+mod.fit$coefficients
+
+beta.hat0<-mod.fit$coefficients[1]
+beta.hat1<-mod.fit$coefficients[2]
+curve(expr = exp(beta.hat0+beta.hat1*x)/(1+exp(beta.hat0+beta.hat1*x)),xlim = c(0,1),ylab = expression(pi),add = T,n=1000, col="red")
+legend(x=0, y=1, legend = c("Verdadero","Estimado"),lty = c(1,1),lwd = c(3,1),col = c("black","red"),bty="n")
