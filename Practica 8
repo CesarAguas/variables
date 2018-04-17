@@ -1,0 +1,32 @@
+---
+title: "Practica 8"
+author: "Cesar Aguas"
+date: "17 de abril de 2018"
+output: html_document
+---
+## A)
+
+```{r}
+install.packages("MASS")
+require(MASS)
+head(Pima.tr)
+head(Pima.tr2)
+
+train<- rbind.data.frame(Pima.tr,Pima.tr2)
+train
+test<-Pima.te
+
+head(test)
+as.numeric(test$type)-1
+
+length(test$npreg)
+sum(is.na(test$npreg))
+sum(is.na(test$glu))
+sum(is.na(test$bp))
+sum(is.na(test$skin))
+sum(is.na(test$bmi))
+sum(is.na(test$ped))
+sum(is.na(test$age))
+sum(is.na(test$type))
+
+```
